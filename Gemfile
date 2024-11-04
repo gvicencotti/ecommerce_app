@@ -18,6 +18,7 @@ gem 'ostruct'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
+  gem 'rspec-rails', '~> 6.0'
 end
 
 group :development do
@@ -25,6 +26,8 @@ group :development do
 end
 
 group :test do
-  gem "capybara"
-  gem "selenium-webdriver"
+  gem 'capybara', '~> 3.37'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
+  gem 'rails-controller-testing', '~> 1.0'
 end
