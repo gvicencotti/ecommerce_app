@@ -1,4 +1,7 @@
 class CategoriesController < ApplicationController
+  before_action :authenticate_user!
+  load_and_authorize_resource
+
   before_action :set_category, only: [ :show, :edit, :update, :destroy ]
   def index
     @categories = Category.all
@@ -45,5 +48,9 @@ class CategoriesController < ApplicationController
 
   def category_params
     params.require(:category).permit(:name)
+  end
+
+  def admin_only
+    redirect_to root_path, alert: "You are not authorized to perform this action." unless current_user&.admin?
   end
 end
