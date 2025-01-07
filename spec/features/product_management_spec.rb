@@ -3,6 +3,17 @@ require 'rails_helper'
 RSpec.describe 'Product Management', type: :feature do
   include ActionView::Helpers::NumberHelper
 
+  let(:admin) { create(:user, :admin) }
+
+  before do
+    Warden.test_mode!
+    login_as(admin, scope: :user)
+  end
+
+  after do
+    Warden.test_reset!
+  end
+
   scenario 'User views the list of products' do
     product = create(:product)
 
