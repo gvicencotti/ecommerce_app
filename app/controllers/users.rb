@@ -1,27 +1,36 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :admin_only
+  before_action :authorize_admin, only: [ :update, :create ]
 
-  def index
-    @users = User.all
+  def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      redirect_to @user, notice: "User was successfully updated."
+    else
+      render :edit
+    end
   end
 
-  def update_role
-    user = User.find(params[:id])
-    if user.update(role_params)
-      redirect_to users_path, notice: "#{user.email} is now a #{user.role}!"
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      redirect_to @user, notice: "User was successfully created."
     else
-      redirect_to users_path, alert: "Failed to update role."
+      render :new
     end
   end
 
   private
 
-  def role_params
-    params.require(:user).permit(:role)
+  def user_params
+    if current_user.admin?
+      params.require(:user).permit(:email, :password, :password_confirmation, :role)
+    else
+      params.require(:user).permit(:email, :password, :password_confirmation)
+    end
   end
 
-  def admin_only
-    redirect_to root_path, alert: "You are not authorized to perform this action." unless current_user.admin?
+  def authorize_admin
+    redirect_to(root_path, alert: "Not authorized") unless current_user.admin?
   end
 end
