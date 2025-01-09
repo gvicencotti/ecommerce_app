@@ -57,7 +57,7 @@ RSpec.describe 'Category Management', type: :feature do
   end
 
   scenario 'Non-admin user cannot see admin options' do
-    _category = create(:category, name: 'Electronics')
+    create(:category, name: 'Electronics')
 
     login_as(user, scope: :user)
     visit categories_path
@@ -67,7 +67,7 @@ RSpec.describe 'Category Management', type: :feature do
   end
 
   scenario 'Admin user manages categories' do
-    _category = create(:category, name: 'Electronics')
+    create(:category, name: 'Electronics')
 
     login_as(admin, scope: :user)
     visit categories_path

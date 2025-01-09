@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe ProductsController, type: :controller do
   let(:admin) { create(:user, :admin) }
+  let(:vendor) { create(:user, :vendor) }
   let(:category) { create(:category) }
-  let(:valid_attributes) { attributes_for(:product).merge(category_id: category.id) }
+  let(:valid_attributes) { attributes_for(:product).merge(category_id: category.id, user_id: vendor.id) }
   let(:invalid_attributes) { attributes_for(:product, name: nil, price: nil, stock: nil) }
 
   before do
@@ -12,7 +13,7 @@ RSpec.describe ProductsController, type: :controller do
 
   describe 'GET #index' do
     it 'returns a success response' do
-      create(:product)
+      create(:product, user: vendor)
       get :index
       expect(response).to be_successful
     end
@@ -38,14 +39,14 @@ RSpec.describe ProductsController, type: :controller do
 
   describe 'DELETE #destroy' do
     it 'destroys the requested product' do
-      product = create(:product)
+      product = create(:product, user: vendor)
       expect {
         delete :destroy, params: { id: product.to_param }
       }.to change(Product, :count).by(-1)
     end
 
     it 'redirects to the products list' do
-      product = create(:product)
+      product = create(:product, user: vendor)
       delete :destroy, params: { id: product.to_param }
       expect(response).to redirect_to(products_url)
     end
