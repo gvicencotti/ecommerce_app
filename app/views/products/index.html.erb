@@ -17,7 +17,7 @@
   </thead>
   <tbody>
     <% @products.each do |product| %>
-      <tr>
+      <tr id="product_<%= product.id %>">
         <td><%= product.name %></td>
         <td><%= number_to_currency(product.price) %></td>
         <td><%= product.stock %></td>
