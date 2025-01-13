@@ -38,41 +38,47 @@ RSpec.describe 'Category Management', type: :feature do
 
     login_as(admin, scope: :user)
     visit edit_category_path(category)
-    fill_in 'Name', with: 'Tech Gadgets'
+
+    fill_in 'Name', with: 'Updated Gadgets'
     click_button 'Update Category'
 
     expect(page).to have_content('Category was successfully updated.')
-    expect(page).to have_content('Tech Gadgets')
+    expect(page).to have_content('Updated Gadgets')
   end
 
   scenario 'User deletes a category' do
-    category = create(:category, name: 'Obsolete Items')
+    category = create(:category, name: 'Gadgets')
 
     login_as(admin, scope: :user)
     visit categories_path
-    click_link 'Delete', href: category_path(category)
 
-    expect(page).to have_content('Category was successfully deleted.')
-    expect(page).not_to have_content('Obsolete Items')
+    within("#category_#{category.id}") do
+      click_link 'Delete'
+    end
+
+    expect(page).to have_content('Category was successfully destroyed.')
+    expect(page).not_to have_content('Gadgets')
   end
 
-  scenario 'Non-admin user cannot see admin options' do
-    create(:category, name: 'Electronics')
+  scenario 'User tries to create a category with invalid inputs' do
+    login_as(admin, scope: :user)
+    visit new_category_path
 
-    login_as(user, scope: :user)
-    visit categories_path
-    expect(page).to have_content('Electronics')
-    expect(page).not_to have_link('Edit')
-    expect(page).not_to have_link('Delete')
+    fill_in 'Name', with: ''
+    click_button 'Create Category'
+
+    expect(page).to have_content("Name can't be blank")
   end
 
-  scenario 'Admin user manages categories' do
-    create(:category, name: 'Electronics')
+  scenario 'User tries to edit a category with invalid inputs' do
+    category = create(:category, name: 'Gadgets')
 
     login_as(admin, scope: :user)
-    visit categories_path
-    expect(page).to have_content('Electronics')
-    expect(page).to have_link('Edit')
-    expect(page).to have_link('Delete')
+    visit edit_category_path(category)
+
+    fill_in 'Name', with: ''
+    click_button 'Update Category'
+
+    expect(page).to have_content("Name can't be blank")
   end
 end

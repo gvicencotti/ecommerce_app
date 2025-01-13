@@ -1,28 +1,27 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource
+  before_action :set_product, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_vendor!, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
-    if current_user.vendor?
-      @products = current_user.products
-    else
-      @products = Product.all
-    end
+    @products = Product.all
   end
 
   def show
   end
 
   def new
-    @product = current_user.products.build
+    @product = Product.new
   end
 
   def create
-    @product = current_user.products.build(product_params)
+    @product = Product.new(product_params)
+    @product.user = current_user
+
     if @product.save
-      redirect_to @product, notice: "Product created successfully!"
+      redirect_to @product, notice: "Product was successfully created."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -44,7 +43,17 @@ class ProductsController < ApplicationController
 
   private
 
+  def set_product
+    @product = Product.find(params[:id])
+  end
+
   def product_params
     params.require(:product).permit(:name, :description, :price, :stock, :category_id)
+  end
+
+  def authorize_vendor!
+    unless current_user.vendor?
+      redirect_to root_path, alert: "You are not authorized to access this page."
+    end
   end
 end
