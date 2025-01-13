@@ -1,5 +1,10 @@
 <h1>Products</h1>
-<%= link_to 'New Product', new_product_path, class: 'btn btn-primary' %>
+<div class="mb-3">
+  <%= link_to 'New Product', new_product_path, class: 'btn btn-primary' %>
+  <% if current_user.admin? %>
+    <%= link_to 'New Category', new_category_path, class: 'btn btn-secondary' %>
+  <% end %>
+</div>
 
 <table class="table table-striped mt-4">
   <thead>
