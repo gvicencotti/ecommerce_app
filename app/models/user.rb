@@ -3,6 +3,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :products, dependent: :destroy
+  has_one :cart, dependent: :destroy
 
   ROLES = %w[regular admin vendor].freeze
   validates :role, inclusion: { in: ROLES }
