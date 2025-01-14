@@ -19,7 +19,7 @@
 
   <div class="form-group">
     <%= form.label :payment_method %>
-    <%= form.text_field :payment_method, class: 'form-control' %>
+    <%= form.select :payment_method, ['Credit Card', 'PayPal', 'Bank Transfer'], {}, class: 'form-control' %>
   </div>
 
   <div class="actions">
