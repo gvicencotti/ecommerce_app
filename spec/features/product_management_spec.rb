@@ -4,6 +4,7 @@ include ActionView::Helpers::NumberHelper
 RSpec.describe 'Product Management', type: :feature do
   let(:admin) { create(:user, :admin) }
   let(:vendor) { create(:user, :vendor) }
+  let(:user) { create(:user) }
   let(:category) { create(:category) }
 
   before do
@@ -22,6 +23,29 @@ RSpec.describe 'Product Management', type: :feature do
     expect(page).to have_content(product.name)
     expect(page).to have_content(number_to_currency(product.price))
     expect(page).to have_content(product.stock)
+    expect(page).to have_link('New Product')
+  end
+
+  scenario 'Vendor views the list of products' do
+    product = create(:product, category: category, user: vendor)
+
+    login_as(vendor, scope: :user)
+    visit products_path
+    expect(page).to have_content(product.name)
+    expect(page).to have_content(number_to_currency(product.price))
+    expect(page).to have_content(product.stock)
+    expect(page).to have_link('New Product')
+  end
+
+  scenario 'Regular user views the list of products' do
+    product = create(:product, category: category, user: vendor)
+
+    login_as(user, scope: :user)
+    visit products_path
+    expect(page).to have_content(product.name)
+    expect(page).to have_content(number_to_currency(product.price))
+    expect(page).to have_content(product.stock)
+    expect(page).not_to have_link('New Product')
   end
 
   scenario 'Vendor creates a new product' do
@@ -109,7 +133,7 @@ RSpec.describe 'Product Management', type: :feature do
   end
 
   scenario 'Non-vendor user tries to create a product' do
-    login_as(admin, scope: :user)
+    login_as(user, scope: :user)
     visit new_product_path
 
     expect(page).to have_current_path(root_path)
@@ -119,7 +143,7 @@ RSpec.describe 'Product Management', type: :feature do
   scenario 'Non-vendor user tries to edit a product' do
     product = create(:product, user: vendor, category: category)
 
-    login_as(admin, scope: :user)
+    login_as(user, scope: :user)
     visit edit_product_path(product)
 
     expect(page).to have_current_path(root_path)

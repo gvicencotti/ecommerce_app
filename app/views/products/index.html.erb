@@ -1,8 +1,7 @@
 <h1>Products</h1>
 <div class="mb-3">
-  <%= link_to 'New Product', new_product_path, class: 'btn btn-primary' %>
-  <% if current_user.admin? %>
-    <%= link_to 'New Category', new_category_path, class: 'btn btn-secondary' %>
+  <% if current_user.vendor? || current_user.admin? %>
+    <%= link_to 'New Product', new_product_path, class: 'btn btn-primary' %>
   <% end %>
 </div>
 
@@ -23,8 +22,10 @@
         <td><%= product.stock %></td>
         <td>
           <%= link_to 'Show', product_path(product), class: 'btn btn-info' %>
-          <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-warning' %>
-          <%= link_to 'Delete', product_path(product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <% if current_user.vendor? || current_user.admin? %>
+            <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-warning' %>
+            <%= link_to 'Delete', product_path(product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <% end %>
         </td>
       </tr>
     <% end %>
