@@ -1,0 +1,35 @@
+<h1>Order Details</h1>
+
+<p>
+  <strong>Address:</strong>
+  <%= @order.address %>
+</p>
+
+<p>
+  <strong>Payment Method:</strong>
+  <%= @order.payment_method %>
+</p>
+
+<h2>Order Items</h2>
+<table class="table table-striped mt-4">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.each do |item| %>
+      <tr>
+        <td><%= item.product.name %></td>
+        <td><%= number_to_currency(item.product.price) %></td>
+        <td><%= item.quantity %></td>
+        <td><%= number_to_currency(item.total_price) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back', root_path, class: 'btn btn-secondary' %>

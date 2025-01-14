@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
-  before_action :authorize_vendor!, only: [ :new, :create, :edit, :update, :destroy ]
+  before_action :authorize_vendor_or_admin!, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
     @products = Product.all
@@ -51,8 +51,8 @@ class ProductsController < ApplicationController
     params.require(:product).permit(:name, :description, :price, :stock, :category_id)
   end
 
-  def authorize_vendor!
-    unless current_user.vendor?
+  def authorize_vendor_or_admin!
+    unless current_user.vendor? || current_user.admin?
       redirect_to root_path, alert: "You are not authorized to access this page."
     end
   end
