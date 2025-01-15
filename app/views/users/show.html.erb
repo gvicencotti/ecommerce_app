@@ -1,0 +1,14 @@
+<h1>User Profile</h1>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Sign Up Date:</strong>
+  <%= @user.created_at.strftime("%B %d, %Y") %>
+</p>
+
+<%= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-warning' %>
+<%= link_to 'Back', root_path, class: 'btn btn-secondary' %>

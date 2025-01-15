@@ -29,6 +29,6 @@ RSpec.describe 'User Management', type: :feature do
     visit root_path
     click_button 'Logout'
 
-    expect(page).to have_content('You need to sign in or sign up before continuing.')
+    expect(page).to have_content('Signed out successfully.')
   end
 end

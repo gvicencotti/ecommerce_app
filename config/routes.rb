@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
-  get "orders/new"
-  get "orders/create"
-  get "orders/show"
   devise_for :users
   root "products#index"
+
   resources :categories
   resources :products
 
@@ -12,7 +10,7 @@ Rails.application.routes.draw do
 
   resources :orders, only: [ :new, :create, :show ]
 
-  resources :users, only: [ :index ] do
+  resources :users, only: [ :index, :show, :edit, :update ] do
     patch :update_role, on: :member
   end
 end
