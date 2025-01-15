@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
-  before_action :authorize_vendor_or_admin!, only: [ :new, :create, :edit, :update, :destroy ]
+  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :authorize_user!, only: [ :edit, :update, :destroy ]
 
   def index
     @products = Product.all
@@ -11,17 +11,15 @@ class ProductsController < ApplicationController
   end
 
   def new
-    @product = Product.new
+    @product = current_user.products.build
   end
 
   def create
-    @product = Product.new(product_params)
-    @product.user = current_user
-
+    @product = current_user.products.build(product_params)
     if @product.save
       redirect_to @product, notice: "Product was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new
     end
   end
 
@@ -32,13 +30,13 @@ class ProductsController < ApplicationController
     if @product.update(product_params)
       redirect_to @product, notice: "Product was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit
     end
   end
 
   def destroy
     @product.destroy
-    redirect_to products_url, notice: "Product was successfully deleted."
+    redirect_to products_url, notice: "Product was successfully destroyed."
   end
 
   private
@@ -51,9 +49,9 @@ class ProductsController < ApplicationController
     params.require(:product).permit(:name, :description, :price, :stock, :category_id)
   end
 
-  def authorize_vendor_or_admin!
-    unless current_user.vendor? || current_user.admin?
-      redirect_to root_path, alert: "You are not authorized to access this page."
+  def authorize_user!
+    unless current_user.admin? || (current_user.vendor? && @product.user_id == current_user.id)
+      redirect_to products_path, alert: "You are not authorized to perform this action."
     end
   end
 end

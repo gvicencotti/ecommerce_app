@@ -1,9 +1,15 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_admin, only: [ :update, :create ]
+  before_action :set_user, only: [ :show, :edit, :update ]
+
+  def show
+  end
+
+  def edit
+  end
 
   def update
-    @user = User.find(params[:id])
     if @user.update(user_params)
       redirect_to @user, notice: "User was successfully updated."
     else
@@ -21,6 +27,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
 
   def user_params
     permitted_params = [ :email, :password, :password_confirmation ]

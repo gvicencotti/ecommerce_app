@@ -1,14 +1,27 @@
 <h1>Products</h1>
-<div class="mb-3">
-  <% if current_user.vendor? || current_user.admin? %>
-    <%= link_to 'New Product', new_product_path, class: 'btn btn-primary' %>
+
+<% if user_signed_in? %>
+  <div class="user-options">
+    <%= link_to 'Profile', user_path(current_user), class: 'btn btn-info' %>
+    <%= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-warning' %>
+  </div>
+
+  <% if current_user.admin? || current_user.vendor? %>
+    <%= link_to 'New Product', new_product_path, class: 'btn btn-primary mt-4' %>
+    <%= link_to 'New Category', new_category_path, class: 'btn btn-primary mt-4' %>
   <% end %>
-</div>
+<% else %>
+  <div class="user-options">
+    <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-primary' %>
+    <%= link_to 'Login', new_user_session_path, class: 'btn btn-success' %>
+  </div>
+<% end %>
 
 <table class="table table-striped mt-4">
   <thead>
     <tr>
       <th>Name</th>
+      <th>Description</th>
       <th>Price</th>
       <th>Stock</th>
       <th>Actions</th>
@@ -18,11 +31,12 @@
     <% @products.each do |product| %>
       <tr id="product_<%= product.id %>">
         <td><%= product.name %></td>
+        <td><%= product.description %></td>
         <td><%= number_to_currency(product.price) %></td>
         <td><%= product.stock %></td>
         <td>
           <%= link_to 'Show', product_path(product), class: 'btn btn-info' %>
-          <% if current_user.vendor? || current_user.admin? %>
+          <% if user_signed_in? && (current_user.admin? || (current_user.vendor? && product.user_id == current_user.id)) %>
             <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-warning' %>
             <%= link_to 'Delete', product_path(product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
           <% end %>
