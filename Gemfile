@@ -11,14 +11,13 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "devise"
 gem "cancancan"
+gem "stripe"
 
 # frontend styling
 gem "bootstrap", "~> 5.3.0"
 gem "sassc-rails"
 
 gem "bootsnap", require: false
-
-
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -27,6 +26,8 @@ group :development, :test do
   gem "rspec-rails", "~> 7.0.0"
   gem "capybara"
   gem "factory_bot_rails"
+  gem "webmock"
+  gem "vcr"
 end
 
 group :development do
