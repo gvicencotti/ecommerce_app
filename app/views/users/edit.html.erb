@@ -1,0 +1,37 @@
+<!-- filepath: /home/gvicencotti/ecommerce_app/app/views/users/edit.html.erb -->
+<h1>Edit Profile</h1>
+
+<% if @user.errors.any? %>
+  <div class="alert alert-danger">
+    <h4>There were some errors:</h4>
+    <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_for(@user, url: profile_path, html: { method: :put }) do |f| %>
+  <div class="form-group">
+    <%= f.label :email %>
+    <%= f.email_field :email, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :password %>
+    <%= f.password_field :password, class: 'form-control' %>
+    <small>(leave blank if you don't want to change it)</small>
+  </div>
+  <div class="form-group">
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :current_password %>
+    <%= f.password_field :current_password, class: 'form-control', required: true %>
+    <small>(we need your current password to confirm your changes)</small>
+  </div>
+  <div class="form-group">
+    <%= f.submit 'Update', class: 'btn btn-primary' %>
+  </div>
+<% end %>
