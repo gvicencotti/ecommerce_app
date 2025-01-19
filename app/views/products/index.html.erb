@@ -1,47 +1,48 @@
+<!-- filepath: /home/gvicencotti/ecommerce_app/app/views/products/index.html.erb -->
 <h1>Products</h1>
 
-<% if user_signed_in? %>
-  <div class="user-options">
-    <%= link_to 'Profile', user_path(current_user), class: 'btn btn-info' %>
-    <%= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-warning' %>
-  </div>
-
-  <% if current_user.admin? || current_user.vendor? %>
-    <%= link_to 'New Product', new_product_path, class: 'btn btn-primary mt-4' %>
-    <%= link_to 'New Category', new_category_path, class: 'btn btn-primary mt-4' %>
-  <% end %>
-<% else %>
-  <div class="user-options">
-    <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-primary' %>
-    <%= link_to 'Login', new_user_session_path, class: 'btn btn-success' %>
-  </div>
+<% if user_signed_in? && (current_user.admin? || current_user.vendor?) %>
+  <%= link_to 'New Product', new_product_path, class: 'btn btn-primary' %>
 <% end %>
 
-<table class="table table-striped mt-4">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Price</th>
-      <th>Stock</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @products.each do |product| %>
-      <tr id="product_<%= product.id %>">
-        <td><%= product.name %></td>
-        <td><%= product.description %></td>
-        <td><%= number_to_currency(product.price) %></td>
-        <td><%= product.stock %></td>
-        <td>
-          <%= link_to 'Show', product_path(product), class: 'btn btn-info' %>
-          <% if user_signed_in? && (current_user.admin? || (current_user.vendor? && product.user_id == current_user.id)) %>
-            <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-warning' %>
-            <%= link_to 'Delete', product_path(product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="filters">
+  <%= form_with(url: products_path, method: :get, local: true) do %>
+    <div class="form-group">
+      <%= label_tag :category_id, 'Category' %>
+      <%= select_tag :category_id, options_from_collection_for_select(Category.all, :id, :name, params[:category_id]), include_blank: 'Select Category', class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= label_tag :min_price, 'Min Price' %>
+      <%= number_field_tag :min_price, params[:min_price], class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= label_tag :max_price, 'Max Price' %>
+      <%= number_field_tag :max_price, params[:max_price], class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= label_tag :in_stock, 'In Stock' %>
+      <%= check_box_tag :in_stock, 'true', params[:in_stock] == 'true', class: 'form-control' %>
+    </div>
+    <%= submit_tag 'Filter', class: 'btn btn-primary' %>
+  <% end %>
+</div>
+
+<div class="products">
+  <% @products.each do |product| %>
+    <div class="product" id="product_<%= product.id %>">
+      <h2><%= link_to product.name, product_path(product) %></h2>
+      <p><%= number_to_currency(product.price) %></p>
+      <p><%= product.description %></p>
+      <p>Stock: <%= product.stock %></p>
+      <%= form_with(model: CartItem.new, url: cart_items_path, method: :post, local: true) do |form| %>
+        <%= form.hidden_field :product_id, value: product.id %>
+        <%= form.hidden_field :quantity, value: 1 %>
+        <%= form.submit 'Add to Cart', class: 'btn btn-primary' %>
+      <% end %>
+      <% if user_signed_in? && (current_user.admin? || current_user == product.user) %>
+        <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-secondary' %>
+        <%= link_to 'Delete', product, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
