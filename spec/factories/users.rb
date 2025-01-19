@@ -1,8 +1,14 @@
 FactoryBot.define do
   factory :user do
     email { Faker::Internet.email }
-    password { 'password' }
-    password_confirmation { 'password' }
+    password { "password" }
+    password_confirmation { "password" }
+    role { "regular" }
+    street { Faker::Address.street_address }
+    city { Faker::Address.city }
+    state { Faker::Address.state }
+    zip { Faker::Address.zip_code }
+    country { Faker::Address.country }
 
     trait :admin do
       role { 'admin' }

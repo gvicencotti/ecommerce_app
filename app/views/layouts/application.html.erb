@@ -1,3 +1,4 @@
+<!-- filepath: /home/gvicencotti/ecommerce_app/app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +15,12 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <% if user_signed_in? %>
+            <li class="nav-item">
+              <%= link_to "Profile", user_path(current_user), class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "My Cart", cart_path, class: "nav-link" %>
+            </li>
             <li class="nav-item">
               <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-danger nav-link" %>
             </li>
