@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates :role, inclusion: { in: ROLES }
 
   before_validation :set_default_role, if: :new_record?
+  validates :street, :city, :state, :zip, :country, presence: true, on: :update
 
   def admin?
     role == "admin"
