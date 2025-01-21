@@ -7,6 +7,7 @@ require 'rspec/rails'
 require 'devise'
 require 'vcr'
 require 'webmock/rspec'
+require 'database_cleaner-active_record'
 
 # Require support files
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
@@ -30,20 +31,15 @@ RSpec.configure do |config|
   # Configure fixture paths
   config.fixture_paths = [ "#{::Rails.root}/spec/fixtures" ]
 
-  # Use transactional fixtures
-  config.use_transactional_fixtures = true
+  # Configure Database Cleaner
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
 
-  # Infer spec type from file location
-  config.infer_spec_type_from_file_location!
-
-  # Filter lines from Rails gems in backtraces
-  config.filter_rails_from_backtrace!
-end
-
-# VCR configuration
-VCR.configure do |config|
-  config.cassette_library_dir = 'spec/vcr_cassettes'
-  config.hook_into :webmock
-  config.configure_rspec_metadata!
-  config.filter_sensitive_data('<STRIPE_SECRET_KEY>') { Rails.application.credentials.dig(:stripe, :secret_key) }
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
 end

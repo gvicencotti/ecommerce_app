@@ -37,6 +37,7 @@ end
 group :test do
   gem "selenium-webdriver"
   gem "rails-controller-testing"
+  gem "database_cleaner-active_record"
 end
 
 gem "faker", "~> 3.5"
