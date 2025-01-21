@@ -6,6 +6,7 @@ RSpec.feature "Purchase Process", type: :feature do
   let!(:category) { create(:category, name: "Electronics") }
   let!(:vendor) { create(:user) }
   let!(:product) { create(:product, user: vendor, name: "Unique Product Name", category: category) }
+  let!(:delivery_option) { create(:delivery_option, name: 'Standard Delivery', price: 5.00) }
 
   scenario "User adds products to the cart and completes a purchase" do
     stub_request(:post, "https://api.stripe.com/v1/checkout/sessions").
@@ -28,6 +29,7 @@ RSpec.feature "Purchase Process", type: :feature do
     visit cart_path
     expect(page).to have_content(product.name)
 
+    select 'Standard Delivery', from: 'cart_delivery_option_id'
     click_button 'Checkout'
 
     visit checkout_success_path

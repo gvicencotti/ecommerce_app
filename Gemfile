@@ -12,6 +12,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "devise"
 gem "cancancan"
 gem "stripe"
+gem "ostruct"
 
 # frontend styling
 gem "bootstrap", "~> 5.3.0"
