@@ -14,7 +14,8 @@ RSpec.describe "carts/show.html.erb", type: :view do
   end
 
   it "displays the total price of all items in the cart" do
-    expect(rendered).to have_content("Total: $3,998.99")
+    expect(rendered).to have_selector("tfoot th", text: "Subtotal")
+    expect(rendered).to have_selector("tfoot th", text: "$3,998.99")
   end
 
   it "displays each cart item" do
@@ -22,5 +23,13 @@ RSpec.describe "carts/show.html.erb", type: :view do
     expect(rendered).to have_content(product2.name)
     expect(rendered).to have_content("$2,999.00")
     expect(rendered).to have_content("$999.99")
+  end
+
+  it "displays the delivery option selection" do
+    expect(rendered).to have_content("Select Delivery Option")
+  end
+
+  it "displays the checkout button" do
+    expect(rendered).to have_button("Checkout")
   end
 end
