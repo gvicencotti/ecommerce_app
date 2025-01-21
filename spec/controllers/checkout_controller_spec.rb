@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'vcr'
+require 'ostruct'
 
 RSpec.describe CheckoutController, type: :controller do
   let!(:user) { create(:user) }
@@ -18,6 +19,25 @@ RSpec.describe CheckoutController, type: :controller do
         post :create, params: { cart: { delivery_option_id: delivery_option.id } }
         expect(response).to redirect_to(/https:\/\/checkout\.stripe\.com\/c\/pay\//)
       end
+    end
+
+    it "includes the delivery option in the Stripe Checkout session" do
+      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: "https://checkout.stripe.com/c/pay/test_session"))
+
+      post :create, params: { cart: { delivery_option_id: delivery_option.id } }
+
+      expect(Stripe::Checkout::Session).to have_received(:create).with(
+        hash_including(
+          line_items: array_including(
+            hash_including(
+              price_data: hash_including(
+                product_data: hash_including(name: 'Standard Delivery'),
+                unit_amount: (delivery_option.price * 100).to_i
+              )
+            )
+          )
+        )
+      )
     end
   end
 

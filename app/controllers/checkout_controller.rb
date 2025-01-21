@@ -13,7 +13,7 @@ class CheckoutController < ApplicationController
 
     @amount = (@cart.total_price * 100).to_i
 
-    session = Stripe::Checkout::Session.create(
+    @session = Stripe::Checkout::Session.create(
       payment_method_types: [ "card" ],
       line_items: @cart.cart_items.map do |item|
         {
@@ -44,7 +44,7 @@ class CheckoutController < ApplicationController
       }
     )
 
-    redirect_to session.url, allow_other_host: true
+    redirect_to @session.url, allow_other_host: true
   end
 
   def success
