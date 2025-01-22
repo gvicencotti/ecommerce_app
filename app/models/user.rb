@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :products, dependent: :destroy
   has_many :orders, dependent: :destroy
   has_one :cart, dependent: :destroy
+  has_one :address, dependent: :destroy
+
 
   ROLES = %w[regular admin vendor].freeze
   validates :role, inclusion: { in: ROLES }

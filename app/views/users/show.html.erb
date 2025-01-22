@@ -10,5 +10,9 @@
   <%= @user.created_at.strftime("%B %d, %Y") %>
 </p>
 
+<h2>Address</h2>
+<%= render 'addresses/form', address: @address %>
+
 <%= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-warning' %>
+<%= link_to 'Edit Address', edit_user_address_path(current_user), class: 'btn btn-primary' %>
 <%= link_to 'Back', root_path, class: 'btn btn-secondary' %>

@@ -13,6 +13,8 @@ gem "devise"
 gem "cancancan"
 gem "stripe"
 gem "ostruct"
+gem "httparty"
+
 
 # frontend styling
 gem "bootstrap", "~> 5.3.0"

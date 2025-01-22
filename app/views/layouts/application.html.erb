@@ -1,4 +1,3 @@
-<!-- filepath: /home/gvicencotti/ecommerce_app/app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +6,29 @@
   <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
+  <script>
+    function fetchAddress(cep) {
+      if (cep.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+          .then(response => {
+            if (!response.ok) throw new Error("CEP não encontrado");
+            return response.json();
+          })
+          .then(data => {
+            if (data.erro) {
+              throw new Error("CEP não encontrado");
+            }
+            document.getElementById("street").value = data.logradouro || '';
+            document.getElementById("neighborhood").value = data.bairro || '';
+            document.getElementById("city").value = data.localidade || '';
+            document.getElementById("state").value = data.uf || '';
+          })
+          .catch(error => {
+            alert("Erro ao encontrar endereço: " + error.message);
+          });
+      }
+    }
+  </script>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">

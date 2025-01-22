@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [ :index, :show, :edit, :update ] do
     patch :update_role, on: :member
+    resource :address, only: [ :new, :create, :edit, :update ]
   end
 
   post "checkout/create", to: "checkout#create", as: "checkout_create"
