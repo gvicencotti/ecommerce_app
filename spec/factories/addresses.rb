@@ -1,9 +1,10 @@
 FactoryBot.define do
   factory :address do
-    cep { "MyString" }
-    street { "MyString" }
-    neighborhood { "MyString" }
-    city { "MyString" }
-    state { "MyString" }
+    association :user
+    cep { "12345678" }
+    street { "Main St" }
+    neighborhood { "Downtown" }
+    city { "Anytown" }
+    state { "SP" }
   end
 end
