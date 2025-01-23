@@ -30,7 +30,57 @@
     <%= f.password_field :current_password, class: 'form-control', required: true %>
     <small>(we need your current password to confirm your changes)</small>
   </div>
-  <div class="form-group">
-    <%= f.submit 'Update', class: 'btn btn-primary' %>
+
+  <%= fields_for :address, @user.address || @user.build_address do |a| %>
+    <div class="form-group">
+      <%= a.label :street %>
+      <%= a.text_field :street, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= a.label :neighborhood %>
+      <%= a.text_field :neighborhood, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= a.label :city %>
+      <%= a.text_field :city, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= a.label :state %>
+      <%= a.text_field :state, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= a.label :cep %>
+      <%= a.text_field :cep, class: 'form-control', oninput: "fetchAddress(this.value)" %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Update", class: "btn btn-primary" %>
   </div>
 <% end %>
+
+<%= link_to "Back", user_path(@user), class: "btn btn-secondary" %>
+
+<script>
+  function fetchAddress(cep) {
+    if (cep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => {
+          if (!response.ok) throw new Error("CEP não encontrado");
+          return response.json();
+        })
+        .then(data => {
+          if (data.erro) {
+            throw new Error("CEP não encontrado");
+          }
+          document.getElementById("user_address_street").value = data.logradouro || '';
+          document.getElementById("user_address_neighborhood").value = data.bairro || '';
+          document.getElementById("user_address_city").value = data.localidade || '';
+          document.getElementById("user_address_state").value = data.uf || '';
+        })
+        .catch(error => {
+          alert("Erro ao encontrar endereço: " + error.message);
+        });
+    }
+  }
+</script>

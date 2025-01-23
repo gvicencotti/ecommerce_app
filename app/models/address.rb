@@ -1,6 +1,8 @@
 class Address < ApplicationRecord
   belongs_to :user
 
+  validates :cep, :street, :neighborhood, :city, :state, presence: true
+
   def calculate_freight
     case state
     when "SP" then 10.00
