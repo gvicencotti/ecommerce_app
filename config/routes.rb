@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   end
 
   post "checkout/create", to: "checkout#create", as: "checkout_create"
+  get "checkout/confirm_address", to: "checkout#confirm_address", as: "confirm_address_checkout"
   get "checkout/success", to: "checkout#success", as: "checkout_success"
   get "checkout/cancel", to: "checkout#cancel", as: "checkout_cancel"
 end

@@ -1,4 +1,3 @@
-<!-- filepath: /home/gvicencotti/ecommerce_app/app/views/products/index.html.erb -->
 <h1>Products</h1>
 
 <% if user_signed_in? && (current_user.admin? || current_user.vendor?) %>
@@ -30,19 +29,22 @@
 <div class="products">
   <% @products.each do |product| %>
     <div class="product" id="product_<%= product.id %>">
-      <h2><%= link_to product.name, product_path(product) %></h2>
-      <p><%= number_to_currency(product.price) %></p>
-      <p><%= product.description %></p>
-      <p>Stock: <%= product.stock %></p>
-      <%= form_with(model: CartItem.new, url: cart_items_path, method: :post, local: true) do |form| %>
-        <%= form.hidden_field :product_id, value: product.id %>
-        <%= form.hidden_field :quantity, value: 1 %>
-        <%= form.submit 'Add to Cart', class: 'btn btn-primary' %>
-      <% end %>
-      <% if user_signed_in? && (current_user.admin? || current_user == product.user) %>
-        <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-secondary' %>
-        <%= link_to 'Delete', product, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-      <% end %>
+      <div class="card">
+        <div class="card-header">
+          <h2><%= product.name %></h2>
+        </div>
+        <div class="card-body">
+          <p><%= product.description %></p>
+          <p>Price: <%= number_to_currency(product.price) %></p>
+          <p>Stock: <%= product.stock %></p>
+          <%= link_to 'Show', product_path(product), class: 'btn btn-secondary' %>
+          <%= button_to 'Add to Cart', cart_items_path(cart_item: { product_id: product.id, quantity: 1 }), method: :post, class: 'btn btn-primary' %>
+          <% if user_signed_in? && (current_user.admin? || (current_user.vendor? && product.user == current_user)) %>
+            <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-warning' %>
+            <%= link_to 'Delete', product_path(product), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <% end %>
+        </div>
+      </div>
     </div>
   <% end %>
 </div>

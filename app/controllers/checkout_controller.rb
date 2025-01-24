@@ -1,4 +1,13 @@
 class CheckoutController < ApplicationController
+  before_action :authenticate_user!
+
+  def confirm_address
+    @address = current_user.address
+    unless @address
+      redirect_to new_user_address_path(current_user), alert: "Please add an address before proceeding to checkout."
+    end
+  end
+
   def create
     @cart = current_user.cart
     delivery_option_id = params.dig(:cart, :delivery_option_id)
@@ -11,45 +20,44 @@ class CheckoutController < ApplicationController
       redirect_to cart_path and return
     end
 
-    @amount = (@cart.total_price * 100).to_i
+    if params[:confirm_address] != "yes"
+      redirect_to confirm_address_checkout_path, alert: "Please confirm your delivery address." and return
+    end
 
-    @session = Stripe::Checkout::Session.create(
-      payment_method_types: [ "card" ],
-      line_items: @cart.cart_items.map do |item|
-        {
+    _address = current_user.address
+
+    begin
+      session = Stripe::Checkout::Session.create({
+        payment_method_types: [ "card" ],
+        line_items: @cart.cart_items.map do |item|
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: item.product.name
+              },
+              unit_amount: (item.product.price * 100).to_i
+            },
+            quantity: item.quantity
+          }
+        end + [ {
           price_data: {
             currency: "usd",
             product_data: {
-              name: item.product.name
+              name: "Standard Delivery"
             },
-            unit_amount: (item.product.price * 100).to_i
+            unit_amount: (@cart.delivery_option.price * 100).to_i
           },
-          quantity: item.quantity
-        }
-      end + [ {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: @cart.delivery_option.name
-          },
-          unit_amount: (@cart.delivery_option.price * 100).to_i
-        },
-        quantity: 1
-      } ],
-      mode: "payment",
-      success_url: checkout_success_url,
-      cancel_url: checkout_cancel_url,
-      shipping_address_collection: {
-        allowed_countries: [ "US", "CA", "BR" ]
-      }
-    )
-
-    redirect_to @session.url, allow_other_host: true
-  end
-
-  def success
-  end
-
-  def cancel
+          quantity: 1
+        } ],
+        mode: "payment",
+        success_url: checkout_success_url,
+        cancel_url: checkout_cancel_url
+      })
+      redirect_to session.url, allow_other_host: true
+    rescue Stripe::StripeError => e
+      flash[:error] = e.message
+      redirect_to checkout_confirm_address_path
+    end
   end
 end
