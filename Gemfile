@@ -17,7 +17,7 @@ gem "httparty"
 gem "jquery-rails"
 
 # frontend styling
-gem "bootstrap", "~> 5.1.3"
+gem "bootstrap", "~> 5.3.3"
 gem "sassc-rails"
 
 gem "bootsnap", require: false
