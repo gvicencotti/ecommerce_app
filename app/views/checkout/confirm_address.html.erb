@@ -1,0 +1,32 @@
+<h1>Confirm Delivery Address</h1>
+
+<p>
+  <strong>CEP:</strong>
+  <%= @address.cep %>
+</p>
+<p>
+  <strong>Street:</strong>
+  <%= @address.street %>
+</p>
+<p>
+  <strong>Neighborhood:</strong>
+  <%= @address.neighborhood %>
+</p>
+<p>
+  <strong>City:</strong>
+  <%= @address.city %>
+</p>
+<p>
+  <strong>State:</strong>
+  <%= @address.state %>
+</p>
+
+<%= form_with url: checkout_create_path, method: :post do %>
+  <div class="form-group">
+    <%= label_tag :confirm_address, "Is this your delivery address?" %>
+    <%= select_tag :confirm_address, options_for_select([["Yes", "yes"], ["No", "no"]]), class: "form-control" %>
+  </div>
+  <%= submit_tag "Proceed to Checkout", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'Edit Address', edit_user_address_path(current_user), class: 'btn btn-secondary' %>

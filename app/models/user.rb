@@ -13,7 +13,6 @@ class User < ApplicationRecord
 
   before_validation :set_default_role, if: :new_record?
 
-  # Ensure address fields are validated only if address is present
   validates_associated :address
 
   def admin?

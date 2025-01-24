@@ -13,18 +13,19 @@ RSpec.describe CheckoutController, type: :controller do
     sign_in user
   end
 
-  describe "POST #create" do
-    it "creates a Stripe Checkout session and redirects to the session URL" do
-      VCR.use_cassette("stripe_checkout_session") do
-        post :create, params: { cart: { delivery_option_id: delivery_option.id } }
-        expect(response).to redirect_to(/https:\/\/checkout\.stripe\.com\/c\/pay\//)
-      end
+  describe 'POST #create' do
+    it 'creates a Stripe Checkout session and redirects to the session URL' do
+      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: 'https://checkout.stripe.com/c/pay/test_session'))
+
+      post :create, params: { confirm_address: 'yes', cart: { delivery_option_id: delivery_option.id } }
+
+      expect(response).to redirect_to(/https:\/\/checkout\.stripe\.com\/c\/pay\//)
     end
 
-    it "includes the delivery option in the Stripe Checkout session" do
-      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: "https://checkout.stripe.com/c/pay/test_session"))
+    it 'includes the delivery option in the Stripe Checkout session' do
+      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: 'https://checkout.stripe.com/c/pay/test_session'))
 
-      post :create, params: { cart: { delivery_option_id: delivery_option.id } }
+      post :create, params: { confirm_address: 'yes', cart: { delivery_option_id: delivery_option.id } }
 
       expect(Stripe::Checkout::Session).to have_received(:create).with(
         hash_including(
