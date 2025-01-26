@@ -9,10 +9,8 @@ require 'vcr'
 require 'webmock/rspec'
 require 'database_cleaner-active_record'
 
-# Require support files
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
-# Maintain test schema
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
@@ -20,18 +18,13 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
-  # Include Devise test helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Warden::Test::Helpers, type: :feature
-
-  # Include FactoryBot syntax methods
   config.include FactoryBot::Syntax::Methods
 
-  # Configure fixture paths
   config.fixture_paths = [ "#{::Rails.root}/spec/fixtures" ]
 
-  # Configure Database Cleaner
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)

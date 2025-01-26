@@ -1,22 +1,16 @@
 <h1>Order Details</h1>
 
-<p>
-  <strong>Address:</strong>
-  <%= @order.address %>
-</p>
+<p>Order ID: <%= @order.id %></p>
+<p>Order Date: <%= @order.created_at.strftime("%B %d, %Y") %></p>
+<p>Address: <%= @order.address %></p>
+<p>Payment Method: <%= @order.payment_method %></p>
 
-<p>
-  <strong>Payment Method:</strong>
-  <%= @order.payment_method %>
-</p>
-
-<h2>Order Items</h2>
-<table class="table table-striped mt-4">
+<table class="table">
   <thead>
     <tr>
       <th>Product</th>
-      <th>Price</th>
       <th>Quantity</th>
+      <th>Price</th>
       <th>Total</th>
     </tr>
   </thead>
@@ -24,12 +18,12 @@
     <% @order.order_items.each do |item| %>
       <tr>
         <td><%= item.product.name %></td>
-        <td><%= number_to_currency(item.product.price) %></td>
         <td><%= item.quantity %></td>
+        <td><%= number_to_currency(item.product.price) %></td>
         <td><%= number_to_currency(item.total_price) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to 'Back', root_path, class: 'btn btn-secondary' %>
+<p>Total Price: <%= number_to_currency(@order.total_price) %></p>
