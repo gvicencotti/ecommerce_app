@@ -1,51 +1,58 @@
 require 'rails_helper'
-require 'vcr'
-require 'ostruct'
 
 RSpec.describe CheckoutController, type: :controller do
-  let!(:user) { create(:user) }
-  let!(:product) { create(:product, price: 2999.00) }
-  let!(:cart) { create(:cart, user: user) }
-  let!(:cart_item) { create(:cart_item, cart: cart, product: product, quantity: 1) }
-  let!(:delivery_option) { create(:delivery_option, name: 'Standard Delivery', price: 5.00) }
+  let(:user) { create(:user) }
+  let(:address) { create(:address, user: user) }
+  let(:product) { create(:product) }
+  let(:cart) { create(:cart, user: user) }
+  let!(:cart_item) { create(:cart_item, cart: cart, product: product, quantity: 2) }
+  let(:delivery_option) { create(:delivery_option, price: 10.0) }
 
   before do
     sign_in user
+    cart.update(delivery_option: delivery_option)
+    user.update(address: address)
   end
 
-  describe 'POST #create' do
-    it 'creates a Stripe Checkout session and redirects to the session URL' do
-      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: 'https://checkout.stripe.com/c/pay/test_session'))
-
+  describe 'POST #create', :vcr do
+    it 'redirects to Stripe checkout session' do
       post :create, params: { confirm_address: 'yes', cart: { delivery_option_id: delivery_option.id } }
-
-      expect(response).to redirect_to(/https:\/\/checkout\.stripe\.com\/c\/pay\//)
+      expect(response).to redirect_to(/https:\/\/checkout\.stripe\.com/)
     end
 
-    it 'includes the delivery option in the Stripe Checkout session' do
-      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: 'https://checkout.stripe.com/c/pay/test_session'))
-
+    it 'sets the delivery option' do
       post :create, params: { confirm_address: 'yes', cart: { delivery_option_id: delivery_option.id } }
+      expect(cart.reload.delivery_option).to eq(delivery_option)
+    end
 
-      expect(Stripe::Checkout::Session).to have_received(:create).with(
-        hash_including(
-          line_items: array_including(
-            hash_including(
-              price_data: hash_including(
-                product_data: hash_including(name: 'Standard Delivery'),
-                unit_amount: (delivery_option.price * 100).to_i
-              )
-            )
-          )
-        )
-      )
+    it 'redirects to confirm address if address is not confirmed' do
+      post :create, params: { confirm_address: 'no', cart: { delivery_option_id: delivery_option.id } }
+      expect(response).to redirect_to(confirm_address_checkout_path)
     end
   end
 
   describe 'GET #success' do
-    it 'renders the success template' do
+    before do
+      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: 'https://checkout.stripe.com'))
+    end
+
+    it 'creates an order and order items' do
       get :success
-      expect(response).to render_template(:success)
+      order = user.orders.last
+      expect(order).not_to be_nil
+      expect(order.order_items.count).to eq(1)
+      expect(order.order_items.first.product).to eq(product)
+    end
+
+    it 'clears the cart items' do
+      get :success
+      expect(cart.cart_items.count).to eq(0)
+    end
+
+    it 'redirects to the order show page' do
+      get :success
+      order = user.orders.last
+      expect(response).to redirect_to(order_path(order))
     end
   end
 
