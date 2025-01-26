@@ -3,6 +3,10 @@ class Address < ApplicationRecord
 
   validates :cep, :street, :neighborhood, :city, :state, presence: true
 
+  def full_address
+    "#{street}, #{neighborhood}, #{city}, #{state}, #{cep}"
+  end
+
   def calculate_freight
     case state
     when "SP" then 10.00

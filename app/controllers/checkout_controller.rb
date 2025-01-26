@@ -52,12 +52,41 @@ class CheckoutController < ApplicationController
         } ],
         mode: "payment",
         success_url: checkout_success_url,
-        cancel_url: checkout_cancel_url
+        cancel_url: checkout_cancel_url,
+        customer_email: current_user.email
       })
       redirect_to session.url, allow_other_host: true
     rescue Stripe::StripeError => e
       flash[:error] = e.message
       redirect_to checkout_confirm_address_path
     end
+  end
+
+  def success
+    @cart = current_user.cart
+    @address = current_user.address
+
+    @order = current_user.orders.build(
+      address: @address.full_address,
+      payment_method: "Credit Card",
+      total_price: @cart.cart_items.sum { |item| item.product.price * item.quantity }
+    )
+
+    if @order.save
+      @cart.cart_items.each do |cart_item|
+        @order.order_items.create(
+          product: cart_item.product,
+          quantity: cart_item.quantity,
+          total_price: cart_item.product.price * cart_item.quantity
+        )
+      end
+      @cart.cart_items.destroy_all
+      redirect_to @order, notice: "Order was successfully created."
+    else
+      redirect_to checkout_confirm_address_path, alert: "Order creation failed."
+    end
+  end
+
+  def cancel
   end
 end
