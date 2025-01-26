@@ -7,9 +7,8 @@ RSpec.describe "orders/new.html.erb", type: :view do
   end
 
   it "displays the new order form" do
-    expect(rendered).to have_selector('form')
-    expect(rendered).to have_field('order_address')
-    expect(rendered).to have_field('order_payment_method')
+    expect(rendered).to have_field('Address')
+    expect(rendered).to have_select('Payment method')
     expect(rendered).to have_button('Place Order')
   end
 end

@@ -4,14 +4,12 @@ Rails.application.routes.draw do
 
   resources :categories
   resources :products
+  resources :orders, only: [ :index, :new, :create, :show ]
+  resources :cart_items, only: [ :create, :update, :destroy ]
 
   resource :cart, only: [ :show ] do
     post "add_product/:product_id", to: "carts#add_product", as: "add_product"
   end
-
-  resources :cart_items, only: [ :create, :update, :destroy ]
-
-  resources :orders, only: [ :new, :create, :show ]
 
   resources :users, only: [ :index, :show, :edit, :update ] do
     patch :update_role, on: :member

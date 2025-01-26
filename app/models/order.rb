@@ -5,4 +5,8 @@ class Order < ApplicationRecord
 
   validates :address, presence: true
   validates :payment_method, presence: true
+
+  def total_price
+    order_items.sum(&:total_price)
+  end
 end
