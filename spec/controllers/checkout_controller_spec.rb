@@ -15,6 +15,10 @@ RSpec.describe CheckoutController, type: :controller do
   end
 
   describe 'POST #create', :vcr do
+    before do
+      allow(Stripe::Checkout::Session).to receive(:create).and_return(OpenStruct.new(url: 'https://checkout.stripe.com'))
+    end
+
     it 'redirects to Stripe checkout session' do
       post :create, params: { confirm_address: 'yes', cart: { delivery_option_id: delivery_option.id } }
       expect(response).to redirect_to(/https:\/\/checkout\.stripe\.com/)

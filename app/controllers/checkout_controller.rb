@@ -58,7 +58,7 @@ class CheckoutController < ApplicationController
       redirect_to session.url, allow_other_host: true
     rescue Stripe::StripeError => e
       flash[:error] = e.message
-      redirect_to checkout_confirm_address_path
+      redirect_to confirm_address_checkout_path
     end
   end
 
@@ -83,7 +83,7 @@ class CheckoutController < ApplicationController
       @cart.cart_items.destroy_all
       redirect_to @order, notice: "Order was successfully created."
     else
-      redirect_to checkout_confirm_address_path, alert: "Order creation failed."
+      redirect_to confirm_address_checkout_path, alert: "Order creation failed."
     end
   end
 
