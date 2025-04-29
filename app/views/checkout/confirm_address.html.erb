@@ -24,7 +24,7 @@
 <%= form_with url: checkout_create_path, method: :post do %>
   <div class="form-group">
     <%= label_tag :confirm_address, "Is this your delivery address?" %>
-    <%= select_tag :confirm_address, options_for_select([["Yes", "yes"], ["No", "no"]]), class: "form-control" %>
+    <%= select_tag :confirm_address, options_for_select([["Yes", "yes"], ["No", "no"]], selected: "yes"), class: "form-control" %>
   </div>
   <%= submit_tag "Proceed to Checkout", class: "btn btn-primary" %>
 <% end %>

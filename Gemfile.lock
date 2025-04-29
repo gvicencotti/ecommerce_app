@@ -101,6 +101,8 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    childprocess (5.1.0)
+      logger (~> 1.5)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.0)
     crack (1.0.0)
@@ -168,6 +170,10 @@ GEM
       thor (>= 0.14, < 2.0)
     json (2.10.2)
     language_server-protocol (3.17.0.4)
+    launchy (3.1.1)
+      addressable (~> 2.8)
+      childprocess (~> 5.0)
+      logger (~> 1.6)
     lint_roller (1.1.0)
     logger (1.6.6)
     loofah (2.24.0)
@@ -394,7 +400,6 @@ PLATFORMS
   arm-linux-musl
   arm64-darwin
   x86_64-darwin
-  x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
 
@@ -413,6 +418,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   jquery-rails
+  launchy
   ostruct
   pg (~> 1.1)
   puma (>= 5.0)

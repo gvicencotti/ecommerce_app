@@ -30,6 +30,7 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "webmock"
   gem "vcr"
+  gem 'launchy'
 end
 
 group :development do
