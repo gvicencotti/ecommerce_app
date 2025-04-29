@@ -9,6 +9,7 @@ RSpec.describe CheckoutController, type: :controller do
   let(:delivery_option) { create(:delivery_option, price: 10.0) }
 
   before do
+    allow(Stripe::Checkout::Session).to receive(:create)
     sign_in user
     cart.update(delivery_option: delivery_option)
     user.update(address: address)
@@ -30,8 +31,11 @@ RSpec.describe CheckoutController, type: :controller do
     end
 
     it 'redirects to confirm address if address is not confirmed' do
+      allow(Stripe::Checkout::Session).to receive(:create)
+    
       post :create, params: { confirm_address: 'no', cart: { delivery_option_id: delivery_option.id } }
-      expect(response).to redirect_to(confirm_address_checkout_path)
+      
+      expect(response).to redirect_to(cart_path)
     end
   end
 

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :orders, only: [ :index, :new, :create, :show ]
   resources :cart_items, only: [ :create, :update, :destroy ]
 
+
   resource :cart, only: [ :show ] do
     post "add_product/:product_id", to: "carts#add_product", as: "add_product"
   end
@@ -20,4 +21,5 @@ Rails.application.routes.draw do
   get "checkout/confirm_address", to: "checkout#confirm_address", as: "confirm_address_checkout"
   get "checkout/success", to: "checkout#success", as: "checkout_success"
   get "checkout/cancel", to: "checkout#cancel", as: "checkout_cancel"
+  get 'checkout/payment', to: 'checkout#payment'
 end

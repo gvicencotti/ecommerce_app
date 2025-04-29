@@ -9,9 +9,12 @@ RSpec.describe "carts/show.html.erb", type: :view do
   let!(:cart_item2) { create(:cart_item, cart: cart, product: product2, quantity: 1) }
 
   before do
+    allow(view).to receive(:current_user).and_return(user)
+    create(:address, user: user)
     assign(:cart, cart)
     render
   end
+  
 
   it "displays the total price of all items in the cart" do
     expect(rendered).to have_selector("tfoot th", text: "Subtotal")
@@ -30,6 +33,6 @@ RSpec.describe "carts/show.html.erb", type: :view do
   end
 
   it "displays the checkout button" do
-    expect(rendered).to have_button("Checkout")
+    expect(rendered).to have_button("Proceed to Checkout")
   end
 end

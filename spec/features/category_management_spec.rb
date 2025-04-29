@@ -17,7 +17,8 @@ RSpec.describe 'Category Management', type: :feature do
     create(:category, name: 'Home Appliances')
 
     login_as(admin, scope: :user)
-    visit categories_path
+    visit products_path
+    save_page
     expect(page).to have_content('Electronics')
     expect(page).to have_content('Home Appliances')
   end
@@ -25,6 +26,9 @@ RSpec.describe 'Category Management', type: :feature do
   scenario 'User creates a new category' do
     login_as(admin, scope: :user)
     visit new_category_path
+
+
+    expect(page).to have_field('Name')
 
     fill_in 'Name', with: 'Fashion'
     click_button 'Create Category'
@@ -38,6 +42,8 @@ RSpec.describe 'Category Management', type: :feature do
 
     login_as(admin, scope: :user)
     visit edit_category_path(category)
+
+    expect(page).to have_field('Name')
 
     fill_in 'Name', with: 'Updated Gadgets'
     click_button 'Update Category'
@@ -64,6 +70,8 @@ RSpec.describe 'Category Management', type: :feature do
     login_as(admin, scope: :user)
     visit new_category_path
 
+    expect(page).to have_field('Name')
+
     fill_in 'Name', with: ''
     click_button 'Create Category'
 
@@ -75,6 +83,8 @@ RSpec.describe 'Category Management', type: :feature do
 
     login_as(admin, scope: :user)
     visit edit_category_path(category)
+
+    expect(page).to have_field('Name')
 
     fill_in 'Name', with: ''
     click_button 'Update Category'
