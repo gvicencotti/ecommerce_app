@@ -59,7 +59,7 @@ Aplicação de e-commerce desenvolvida com **Ruby on Rails**, simulando uma loja
 ## 🔥 Comandos Úteis no Ambiente Docker
  - Rodar os testes com RSpec:
     ```bash
-    docker-compose exec web rspec
+    docker-compose exec web bundle exec rspec
 
 ## 📜 Licença
 Este projeto é de uso livre para fins de estudo e demonstração profissional.
