@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Cart Management', type: :feature do
-  let(:user) { create(:user) }
+  let(:user) { create(:user) }  # Alterado de :admin para :user
   let(:product) { create(:product, name: 'Product 1', price: 19.99) }
 
   before do
     login_as(user, scope: :user)
-    user.create_cart
+    user.create_cart  # Certifique-se de que o usuário tenha um carrinho
   end
 
   scenario 'User adds a product to the cart' do

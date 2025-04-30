@@ -10,6 +10,6 @@ done
 
 echo "PostgreSQL is ready!"
 
-bundle exec rails db:migrate
+bundle exec rake db:create db:migrate db:seed
 
 exec "$@"

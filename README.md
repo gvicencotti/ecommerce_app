@@ -48,11 +48,15 @@ Aplicação de e-commerce desenvolvida com **Ruby on Rails**, simulando uma loja
    cd ecommerce_app
 
 
-2. Crie os containers e suba a aplicação:
+2. Copie o arquivo de variáveis de ambiente:
+   ```bash
+   cp .env.example .env
+
+3. Crie os containers e suba a aplicação:
    ```bash
    docker-compose up --build
 
-3. Crie o banco de dados, rode as migrations e os seeds:
+4. Crie o banco de dados, rode as migrations e os seeds:
     ```bash
     docker-compose exec web rails db:create db:migrate db:seed
 
