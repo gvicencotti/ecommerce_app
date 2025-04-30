@@ -1,65 +1,65 @@
 # 🛒 Ecommerce App
-Aplicação de e-commerce desenvolvida com Ruby on Rails, simulando uma loja virtual com funcionalidades de cadastro de produtos, categorias, carrinho de compras, pedidos, usuários e controle de endereços.
 
-# 📋 Funcionalidades
-* Cadastro de usuários (com autenticação Devise)
+Aplicação de e-commerce desenvolvida com **Ruby on Rails**, simulando uma loja virtual com funcionalidades como cadastro de produtos, categorias, carrinho de compras, pedidos, usuários e controle de endereços.
 
-* Gestão de produtos e categorias
+---
 
-* Carrinho de compras
+## 📋 Funcionalidades
 
-* Processo de checkout
+- Cadastro de usuários (com autenticação via **Devise**)
+- Gestão de produtos e categorias
+- Carrinho de compras
+- Processo de checkout
+- Gerenciamento de pedidos
+- Endereços associados aos usuários
+- Diferentes perfis de usuário: **Admin**, **Vendedor** e **Usuário padrão**
 
-* Gerenciamento de pedidos
+---
 
-* Endereço associado ao usuário
+## 🛠️ Tecnologias Utilizadas
 
-* Diferentes perfis de usuário (admin / vendedor / usuário padrão)
+- Ruby on Rails
+- PostgreSQL
+- Docker & Docker Compose
+- RSpec (para testes automatizados)
+- Devise (autenticação)
+- CanCanCan (autorização)
+- FactoryBot (fabricação de dados de teste)
+- API Stripe (integração de pagamentos)
+- API CEP (busca automática de endereço por CEP)
 
-# 🛠️ Tecnologias Utilizadas
-* Ruby on Rails
+---
 
-* PostgreSQL
+## 🚀 Como Rodar o Projeto Localmente
 
-* Docker e Docker Compose
+### ✅ Pré-requisitos
 
-* RSpec para testes
+- [Docker](https://www.docker.com/) instalado
+- [Docker Compose](https://docs.docker.com/compose/) instalado
 
-* Devise para autenticação
+---
 
-* CanCanCan
+## 🐳 Rodando com Docker
 
-* FactoryBot
+1. Clone o repositório:
 
-* API Stripe (integração de pagamentos)
+   ```bash
+   git clone https://github.com/gvicencotti/ecommerce_app.git
+   cd ecommerce_app
 
-* API CEP
 
-# 🚀 Como rodar o projeto localmente
-Pré-requisitos:
-*Docker instalado
+2. Crie os containers e suba a aplicação:
+   ```docker-compose up --build
 
-*Docker Compose instalado
+3. Crie o banco de dados, rode as migrations e os seeds:
+    ```docker-compose exec web rails db:create db:migrate db:seed
 
-# 🐳 Rodando com Docker
-Clone o repositório:
+## 🔥 Comandos Úteis no Ambiente Docker
+ - Rodar os testes com RSpec:
+    ```docker-compose exec web rspec
 
-```git clone https://github.com/seu-usuario/seu-repo.git
-cd ecommerce_app
-
-Crie os containers e suba a aplicação:
-docker-compose up --build
-
-Crie o banco de dados, rode as migrations e seeds:
-docker-compose exec web rails db:create db:migrate db:seed
-
-# 🔥 Comandos úteis no ambiente Docker
-docker-compose exec web rspec
-
-# 📜 Licença
+## 📜 Licença
 Este projeto é de uso livre para fins de estudo e demonstração profissional.
 
-# ✨ Observação Final
-Projeto desenvolvido com o objetivo de consolidar conhecimentos em backend Ruby on Rails, seguindo boas práticas de desenvolvimento e configuração com Docker.
-
-
+## ✨ Observação Final
+Projeto desenvolvido com o objetivo de consolidar conhecimentos em backend com Ruby on Rails, seguindo boas práticas de desenvolvimento e utilizando Docker para facilitar a configuração e portabilidade do ambiente.
