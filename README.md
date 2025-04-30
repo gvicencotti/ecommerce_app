@@ -45,16 +45,16 @@ Pré-requisitos:
 Clone o repositório:
 
 ```git clone https://github.com/seu-usuario/seu-repo.git
-cd ecommerce_app```
+cd ecommerce_app
 
 Crie os containers e suba a aplicação:
-```docker-compose up --build```
+docker-compose up --build
 
 Crie o banco de dados, rode as migrations e seeds:
-```docker-compose exec web rails db:create db:migrate db:seed```
+docker-compose exec web rails db:create db:migrate db:seed
 
 # 🔥 Comandos úteis no ambiente Docker
-```docker-compose exec web rspec```
+docker-compose exec web rspec
 
 # 📜 Licença
 Este projeto é de uso livre para fins de estudo e demonstração profissional.
