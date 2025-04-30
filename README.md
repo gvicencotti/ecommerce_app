@@ -1,47 +1,47 @@
-🛒 Ecommerce App
+# 🛒 Ecommerce App
 Aplicação de e-commerce desenvolvida com Ruby on Rails, simulando uma loja virtual com funcionalidades de cadastro de produtos, categorias, carrinho de compras, pedidos, usuários e controle de endereços.
 
-📋 Funcionalidades
-Cadastro de usuários (com autenticação Devise)
+# 📋 Funcionalidades
+* Cadastro de usuários (com autenticação Devise)
 
-Gestão de produtos e categorias
+* Gestão de produtos e categorias
 
-Carrinho de compras
+* Carrinho de compras
 
-Processo de checkout
+* Processo de checkout
 
-Gerenciamento de pedidos
+* Gerenciamento de pedidos
 
-Endereço associado ao usuário
+* Endereço associado ao usuário
 
-Diferentes perfis de usuário (admin / vendedor / usuário padrão)
+* Diferentes perfis de usuário (admin / vendedor / usuário padrão)
 
-🛠️ Tecnologias Utilizadas
-Ruby on Rails
+# 🛠️ Tecnologias Utilizadas
+* Ruby on Rails
 
-PostgreSQL
+* PostgreSQL
 
-Docker e Docker Compose
+* Docker e Docker Compose
 
-RSpec para testes
+* RSpec para testes
 
-Devise para autenticação
+* Devise para autenticação
 
-CanCanCan
+* CanCanCan
 
-FactoryBot
+* FactoryBot
 
-API Stripe (integração de pagamentos)
+* API Stripe (integração de pagamentos)
 
-API CEP
+* API CEP
 
-🚀 Como rodar o projeto localmente
-Pré-requisitos
-Docker instalado
+# 🚀 Como rodar o projeto localmente
+Pré-requisitos:
+*Docker instalado
 
-Docker Compose instalado
+*Docker Compose instalado
 
-🐳 Rodando com Docker
+# 🐳 Rodando com Docker
 Clone o repositório:
 
 ```git clone https://github.com/seu-usuario/seu-repo.git
@@ -53,13 +53,13 @@ Crie os containers e suba a aplicação:
 Crie o banco de dados, rode as migrations e seeds:
 ```docker-compose exec web rails db:create db:migrate db:seed```
 
-🔥 Comandos úteis no ambiente Docker
+# 🔥 Comandos úteis no ambiente Docker
 ```docker-compose exec web rspec```
 
-📜 Licença
+# 📜 Licença
 Este projeto é de uso livre para fins de estudo e demonstração profissional.
 
-✨ Observação Final
+# ✨ Observação Final
 Projeto desenvolvido com o objetivo de consolidar conhecimentos em backend Ruby on Rails, seguindo boas práticas de desenvolvimento e configuração com Docker.
 
 
