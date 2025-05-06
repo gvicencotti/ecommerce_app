@@ -54,17 +54,16 @@ Aplicação de e-commerce desenvolvida com **Ruby on Rails**, simulando uma loja
 
 3. Crie os containers e suba a aplicação:
    ```bash
-   docker-compose up --build
+   docker-compose up --build -d
 
 4. Crie o banco de dados, rode as migrations e os seeds:
     ```bash
-    docker-compose exec web rails db:create db:migrate db:seed
+    docker-compose exec web bundle exec rails db:create db:migrate db:seed
 
 ## 🔥 Comandos Úteis no Ambiente Docker
  - Rodar os testes com RSpec:
     ```bash
-    docker-compose exec web bundle exec rails db:create db:migrate db:seedcp .env.example .env
-
+    docker-compose exec web bundle exec rspec
 
 ## 🔥 Login Admin
  - Dados de login:
